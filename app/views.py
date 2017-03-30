@@ -10,6 +10,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 from bs4 import BeautifulSoup
 import requests
 import urlparse
+from image-getter import get_imageURLS  # not working :/
 
 ###
 # Routing for your application.
@@ -20,6 +21,16 @@ def home():
     """Render website's home page."""
     return render_template('home.html')
 
+@app.route('/api/thumbnails', methods=['GET'])
+def get_thumbnails():
+    # Set URL to grab thumbnail images from
+    url = "https://www.amazon.com/dp/B015WXL0C6"
+    # Get image URLs
+    urls = get_imageURLS(url)
+    # Generate JSON output
+    err = None
+    msg = "Success"
+    return jsonify(error=err, message=msg,thumbnails=urls)
 
 ###
 # The functions below should be applicable to all Flask apps.
