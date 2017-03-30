@@ -10,7 +10,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 from bs4 import BeautifulSoup
 import requests
 import urlparse
-from image-getter import get_imageURLS  # not working :/
+from imageGetter import get_imageURLS  
 
 ###
 # Routing for your application.
@@ -28,9 +28,20 @@ def get_thumbnails():
     # Get image URLs
     urls = get_imageURLS(url)
     # Generate JSON output
-    err = None
-    msg = "Success"
+    if urls:
+        err = None
+        msg = "Success"
+    else:
+        err = "Request Error"
+        msg = "Failed"
+    
     return jsonify(error=err, message=msg,thumbnails=urls)
+
+@app.route('/thumbnails/view')
+def view_thumbnails():
+    """ Render a page for viewing a list of all thumbnails grabbed """
+    return render_template('thumbnails.html')
+        
 
 ###
 # The functions below should be applicable to all Flask apps.
